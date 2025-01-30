@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan Result</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .result-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .result-container p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .result-container .status-success {
+            color: green;
+        }
+        .result-container .status-error {
+            color: red;
+        }
+        .result-container .permissions-list {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+        .result-container .permissions-list li {
+            font-size: 16px;
+        }
+        .result-container a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .result-container a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Scan Result</h1>
+
+    <div class="result-container">
+        <p><strong>File Hash:</strong> {{ scan_result['File Hash'] }}</p>
+        <p><strong>Status:</strong> 
+            {% if scan_result['Status'] == 'success' %}
+                <span class="status-success">{{ scan_result['Status'] }}</span>
+            {% else %}
+                <span class="status-error">{{ scan_result['Status'] }}</span>
+            {% endif %}
+        </p>
+        
+        {% if scan_result['Status'] == 'success' %}
+            <p><strong>Hybrid Analysis Report:</strong> <a href="{{ scan_result['URL'] }}" target="_blank">View Detailed Report</a></p>
+        {% endif %}
+
+        <h3>Suspicious Permissions:</h3>
+        {% if scan_result['Suspicious Permissions'] != 'None' %}
+            <ul class="permissions-list">
+                {% for permission in scan_result['Suspicious Permissions'] %}
+                    <li>{{ permission }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No suspicious permissions detected.</p>
+        {% endif %}
+    </div>
+
+</body>
+</html>
